@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body class="main" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div class="login-screen"></div>
+<div class="login-center">
+    <div class="container min-height" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-xs-4 col-md-offset-8">
+                <div class="login" id="card">
+                    <div class="front signin_form">
+
+                        <div class="alert alert-danger fade in" id="myMessage">
+                            <span th:utext="${successMessage}"></span>
+                        </div>
+
+                        <img style="margin-top:10%; margin-bottom:10%;" th:src="@{/images/logo.png}" class="img-responsive center-block"
+                             width="300" height="300" alt="Logo"/>
+                        <p>Prijavite se na vaš nalog</p>
+                        <form class="login-form" th:action="@{/login}" method="POST">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="email" id="email" name="email" class="form-control" th:placeholder="Email" required>
+                                    <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-user"></i>
+                                      </span>
+                                </div>
+                                <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('userDTO.email')}" th:errors="*{userDTO.email}">Greska</span>-->
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="password" id="password" name="password" class="form-control" th:placeholder="Sifra" required>
+                                    <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-lock"></i>
+                                      </span>
+                                </div>
+                                <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('userDTO.password')}" th:errors="*{userDTO.password}">Greska</span>-->
+                            </div>
+                            <!--<div class="checkbox">-->
+                                <!--<label><input type="checkbox">Zapamti lozinku.</label>-->
+                            <!--</div>-->
+
+                            <div class="form-group sign-btn">
+                                <input type="submit" class="btn" value="Uloguj se">
+                                <!--<p><a href="#" class="forgot">Nemožete pristupiti svom racunu?</a></p>-->
+                            </div>
+                            <div>
+                                <p><strong>Nemate nalog ili ste zaboravili lozinku?</strong><br><a href="" id="flip-btn" class="signup signup_link">Prijavite sa za novi nalog ili resetujte lozinku!</a></p>
+                                <br/>
+                                <p>Vratite se na Web stranicu <a th:href="@{/}" class="signup" style="color: #FF1C19"> www.sitrepo.com</a></p>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="back signup_form" style="opacity: 0;">
+                        <p>Napravite novi nalog ili reseujte lozinku</p>
+
+
+                        <!-- PODACI O KORISNIKU -->
+                        <form autocomplete="off" modelAttribute="user" th:action="@{/registration}" method="post"
+                              role="form" class="login-form">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"> <span class="glyphicon glyphicon-chevron-right"></span>Napravite nalog</a>
+                                </h4>
+                            </div>
+
+                            <div id="collapse1" class="panel-collapse collapse in">
+
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" th:field="*{user.firstName}" name="name" placeholder="Ime" required>
+                                    <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-user"></i>
+                                      </span>
+                                </div>
+                                <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('user.name')}" th:errors="*{user.name}">Greska</span>-->
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" th:field="*{user.lastName}" name="lastName" placeholder="Prezime" required>
+                                    <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-user"></i>
+                                      </span>
+                                </div>
+                                <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('user.lastName')}" th:errors="*{user.lastName}">Greska</span>-->
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="email" class="form-control" th:field="*{user.username}" placeholder="E-mail" required>
+                                    <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-envelope"></i>
+                                      </span>
+                                </div>
+                                <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}">Greska</span>-->
+                            </div>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" th:field="*{user.password}" placeholder="Password" required>
+                                        <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-lock"></i>
+                                      </span>
+                                    </div>
+                                    <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}">Greska</span>-->
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" th:field="*{user.promoKod}" placeholder="Promo kod" >
+                                        <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-lock"></i>
+                                      </span>
+                                    </div>
+                                    <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}">Greska</span>-->
+                                </div>
+
+                            <div class="form-group sign-btn">
+                                <input type="submit" class="btn" value="Sign up" value="Snimi">
+                            </div>
+                            </div>
+                        </form>
+
+                        <!-- RESESTUJ LOZINKU -->
+                        <form autocomplete="off" modelAttribute="user" th:action="@{/resetLozinke}" method="post"
+                              role="form" class="login-form">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"> <span class="glyphicon glyphicon-chevron-right"></span>Resetuj lozinku</a>
+                                </h4>
+                            </div>
+
+                            <div id="collapse2" class="collapse">
+
+                                <h3>Unesiti E-mail da bi ste resetovali lozinku</h3>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="email" name="resetpass" class="form-control" placeholder="E-mail" required>
+                                        <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-envelope"></i>
+                                      </span>
+                                    </div>
+                                    <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}">Greska</span>-->
+                                </div>
+
+                            <div class="form-group sign-btn">
+                                <input type="submit" class="btn" value="Sign up" value="Resetuj">
+                            </div>
+                            </div>
+                            <hr/>
+                            <p>Već imate nalog prjavite se <a href="#" id="unflip-btn" class="signup" style="color: #FF1C19"> Log in</a></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Flip/1.0.18/jquery.flip.js"></script>
+</body>
+</html>
+
+<style>
+
+    html, body {
+        height: 100%;
+        width: 100%;
+    }
+
+    body {
+        font-family: 'Raleway',sans-serif;
+        position: relative;
+        /*background: rgba(0, 0, 0, 0) url("../img/ptn.png") repeat scroll 0 0;*/
+    }
+
+    button{
+
+        width: 10px;
+        color: #1b5a7c;
+    }
+
+    .in-page {
+        min-height: 520px;
+    }
+
+    .main {
+        position: relative;
+    }
+
+    a {
+        color: #FFF;
+    }
+
+    a:hover, a:focus {
+        color: #FFF;
+    }
+
+    .btn-cyan {
+        background-color: #1b5a7c;
+        color: #fff;
+    }
+
+    .btn-cyan:hover {
+        color: #fff;
+        opacity: 0.9;
+    }
+
+    .form-control:focus {
+        border-color: #1b5a7c;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(24, 204, 162, 0.6);
+        outline: 0 none;
+    }
+
+    .min-height {
+        min-height: 380px;
+    }
+
+    .login-screen {
+        background-image: url(https://www.squiz.net/__public/Systems/Perspective/FileCache/1-32000/465/prop/header-bg-image.jpg?t=1472431690);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+
+    .login-screen:before {
+        content: "";
+        background: rgba(0,0,0, 0.5);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    .login-center {
+        text-align: left;
+    }
+
+    .login {
+        width: 320px;
+        color: #fff;
+    }
+
+    .login .login-form {
+        text-align: left;
+    }
+
+    .login label {
+        color: #fff;
+    }
+
+    .login-form .input-group .form-control {
+        background: none;
+        height: 44px;
+        color: #ddd;
+    }
+
+    .login-form .input-group .input-group-addon {
+        background: none;
+    }
+
+    .login-form .input-group .input-group-addon .glyphicon {
+        color: #1b5a7c;
+    }
+
+    .login-form .input-group .form-control::-moz-placeholder {
+        color: #fff;
+        opacity: 0.3;
+    }
+
+    .login .sign-btn input.btn {
+        background: #1b5a7c;
+        border-color: #1b5a7c;
+        color: #fff;
+        width: 180px;
+    }
+
+    .login .sign-btn a {
+        text-decoration: none;
+    }
+
+    .login .checkbox {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .login .forgot {
+        display: inline-block;
+        margin: 20px 0;
+    }
+</style>
+
+<script>
+
+    $(function() {
+        setTimeout(function() {
+            $("#myMessage").hide();
+        }, 5000);
+    });
+
+    $().ready(function() {
+        $("#card").flip({
+            trigger: 'manual'
+        });
+    });
+
+
+    $(".signup_link").click(function() {
+
+        $(".signin_form").css('opacity', '0');
+        $(".signup_form").css('opacity', '100');
+
+
+        $("#card").flip(true);
+
+        return false;
+    });
+
+    $("#unflip-btn").click(function(){
+
+        $(".signin_form").css('opacity', '100');
+        $(".signup_form").css('opacity', '0');
+
+        $("#card").flip(false);
+
+        return false;
+
+    });
+</script>

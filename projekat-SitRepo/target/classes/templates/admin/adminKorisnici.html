@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<div>
+    <nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-header">
+                    <a th:href="@{/admin/adminIzvestajiVecaVozac}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+                </div>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/admin/adminIzvestajiVecaVozac}">Izveštaji</a></li>
+                    <li><a th:href="@{/admin/adminPoslatiIzvestaji}">Poslati izveštaji</a></li>
+                    <li><a th:href="@{/admin/adminKlijentiLista}">Klijenti</a></li>
+                    <li><a th:href="@{/admin/adminKorisnici}">Korisnici aplikacije</a></li>
+                    <li><a th:href="@{/admin/adminPodesavanja}">Podešavanja</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                    <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <!-- Form Name -->
+        <legend>Korisnici aplikacije</legend>
+        <div class="row">
+            <div class="panel panel-primary filterable">
+                <div class="panel-heading" style="background-color: #3aa188 !important">
+                    <h3 class="panel-title">KORISNICI APLIKACIJE</h3>
+                    <div class="pull-right">
+                        <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Pretraga</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr class="filters">
+                        <th>Slika korisnika</th>
+                        <th><input type="text" class="form-control" placeholder="Ime" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Prezime" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Email" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Adresa" disabled></th>
+                        <th style="width: 100px;"><input type="text" class="form-control" placeholder="Drzava" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Telefon" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Status" disabled></th>
+                        <th align="center"><span class="glyphicon glyphicon-cog"></span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="lista:${lista}">
+                        <td>
+                            <img id="myImg" th:src="@{/admin/imageUsera/{id}(id=${lista.id})}" style="width: 60px !important" class="img-responsive img-circle"/>
+                        </td>
+                        <td th:text="${lista.name}"/>
+                        <td th:text="${lista.lastName}"/>
+                        <td th:text="${lista.email}"/>
+                        <td th:text="${lista.adresa}"/>
+                        <td th:text="${lista.drzava}"/>
+                        <td th:text="${lista.telefon}"/>
+                        <td style="color: #FF1C19; font-weight: bold;" th:text="${lista.status}"/>
+                        <td style="align: center; width: 100px;">
+                            <!--<input type="checkbox" checked data-toggle="toggle" data-onstyle="success">-->
+                            <a th:href="@{/admin/aktivirajKorisnika/{id}(id=${lista.id})}" class="btn btn-warning btn-sm btn-success"><span class="glyphicon glyphicon-ok"></span></a>
+                            <a th:href="@{/admin/deaktivirajKorisnika/{id}(id=${lista.id})}" class="btn btn-warning btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+        </div>
+        <div class="row">
+
+            <div class="form-group">
+                <label class="col-md-1 control-label" for="pageSizeSelect">Br. stavki</label>
+                <div class="col-md-1">
+                    <div style="width: 100px" class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <select class="form-control"  id="pageSizeSelect">
+                            <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}"
+                                    th:selected="${pageSize} == ${selectedPageSize}"></option>
+                        </select>
+                    </div>
+                </div>
+            <div th:if="${lista.totalPages != 1}" class="form-group col-md-11 pagination-centered">
+                <ul class="pagination">
+                    <li th:class="${lista.number == 0} ? disabled">
+                        <a class="pageLink" th:href="@{/admin/adminKorisnici/(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+                    </li>
+                    <li th:class="${lista.number == 0} ? disabled">
+                        <a class="pageLink" th:href="@{/admin/adminKorisnici/(pageSize=${selectedPageSize}, page=${lista.number})}">&larr;</a>
+                    </li>
+                    <li th:class="${lista.number == (page - 1)} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+                        <a class="pageLink" th:href="@{/admin/adminKorisnici/(pageSize=${selectedPageSize}, page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <li th:class="${lista.number + 1 == lista.totalPages} ? disabled">
+                        <a class="pageLink"  th:href="@{/admin/adminKorisnici/(pageSize=${selectedPageSize}, page=${lista.number + 2})}">&rarr;</a>
+                    </li>
+                    <li th:class="${lista.number + 1 == lista.totalPages} ? disabled">
+                        <a class="pageLink" th:href="@{/admin/adminKorisnici/(pageSize=${selectedPageSize}, page=${lista.totalPages})}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+        <hr/>
+    </div>
+</div>
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+</div>
+
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script th:src="@{/js/korisniciLista.js}"></script>
+</html>
+
+

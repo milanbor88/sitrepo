@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/podesavanja.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<div>
+    <nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-header">
+                    <a th:href="@{/admin/adminIzvestajiVecaVozac}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+                </div>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/admin/adminIzvestajiVecaVozac}">Izveštaji</a></li>
+                    <li><a th:href="@{/admin/adminPoslatiIzvestaji}">Poslati izveštaji</a></li>
+                    <li><a th:href="@{/admin/adminKlijentiLista}">Klijenti</a></li>
+                    <li><a th:href="@{/admin/adminKorisnici}">Korisnici aplikacije</a></li>
+                    <li><a th:href="@{/admin/adminPodesavanja}">Podešavanja</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                    <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 ">
+                <form class="form-horizontal" th:object="${user}" th:action="@{/admin/adminPodesavanja}" enctype="multipart/form-data" method="POST">
+                    <fieldset>
+                        <!-- Form Name -->
+                        <legend>Profil administratora</legend>
+
+                        <div>
+                            <span style="color: green" th:utext="${successMessage}"></span>
+                            <hr/>
+                        </div>
+
+                        <!--Ime-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="name">Ime</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user">
+                                        </i>
+                                    </div>
+                                    <input id="name" th:value="*{name}" name="name" type="text" placeholder="Ime" class="form-control input-md">
+                                </div>
+                                <span style="color: #FF1C19" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Greska</span>
+                            </div>
+                        </div>
+
+                        <!--Prezime-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="lastName">Prezime</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user">
+                                        </i>
+                                    </div>
+                                    <input id="lastName" th:value="*{lastName}" name="lastName" type="text" placeholder="Prezime" class="form-control input-md">
+                                </div>
+                                <span style="color: #FF1C19" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Greska</span>
+                            </div>
+                        </div>
+
+                        <!-- File Button -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="Upload photo">Ubacite sliku vozila</label>
+                            <div class="col-md-4">
+                                <input id="Upload photo" name="fileUpload" class="input-file" type="file">
+                            </div>
+                        </div>
+
+                        <!--E-mail-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="email">E-mail</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user">
+                                        </i>
+                                    </div>
+                                    <input id="email" th:value="*{email}" name="email" type="email" placeholder="E-mail" class="form-control input-md">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Password-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="password">Password</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user">
+                                        </i>
+                                    </div>
+                                    <input id="password" th:value="*{password}" name="password" type="password" placeholder="Password" class="form-control input-md">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Adresa-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="adresa">Adresa</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user">
+                                        </i>
+                                    </div>
+                                    <input id="adresa" th:value="*{adresa}" name="adresa" type="text" placeholder="Adresa" class="form-control input-md">
+                                </div>
+                                <span style="color: #FF1C19" th:if="${#fields.hasErrors('adresa')}" th:errors="*{adresa}">Greska</span>
+                            </div>
+                        </div>
+
+                        <!--Poštanski broj-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="postanskiBroj">Poštanski broj</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user">
+                                        </i>
+                                    </div>
+                                    <input id="postanskiBroj" th:value="*{postanskiBroj}" name="postanskiBroj" type="number" placeholder="Poštanski broj" class="form-control input-md">
+                                </div>
+                                <span style="color: #FF1C19" th:if="${#fields.hasErrors('postanskiBroj')}" th:errors="*{postanskiBroj}">Greska</span>
+                            </div>
+                        </div>
+
+                        <!--Država-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="drzava">Država</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user">
+                                        </i>
+                                    </div>
+                                    <select th:field="*{drzava}" id="drzava" class="form-control" >
+                                        <!--/*@thymesVar id="getDrzava" type=""*/-->
+                                        <option th:each="drzave : ${listaDrzava}"
+                                                th:value="${drzave.drzava}"
+                                                th:text="${drzave.drzava}"></option>
+                                    </select>
+                                </div>
+                                <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('naziv')}" th:errors="*{naziv}">Greska</span>-->
+                            </div>
+                        </div>
+
+                        <!--Telefon-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="telefon">Telefon</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user">
+                                        </i>
+                                    </div>
+                                    <input id="telefon" th:value="*{telefon}" name="telefon" type="text" placeholder="Telefon" class="form-control input-md">
+                                </div>
+                                <span style="color: #FF1C19" th:if="${#fields.hasErrors('telefon')}" th:errors="*{telefon}">Greska</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <input type="number" th:field="*{id}" readonly="readonly" type="hidden" />
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" ></label>
+                            <div class="col-md-4">
+                                <input type="submit" data-toggle="page-alert" data-toggle-id="1" class="btn btn-success" value="Snimi">
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="col-md-2 hidden-xs">
+                <img id="myImg" th:src="@{/admin/imageAdmin}" class="img-responsive img-thumbnail" th:onerror="'this.src=\'' + @{/images/default-slider-image.png} + '\';'" />
+            </div>
+
+            <div id="myModal" class="modal" style="z-index:1000;">
+                <img class="modal-content" id="img01">
+            </div>
+
+        </div>
+    </div>
+    <img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script th:src="@{/js/podesavanja.js}"></script>
+</html>
+

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-header">
+                <a th:href="@{/user/home}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+            </div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <!-- Form Name -->
+    <legend>Popunite i pregledajte podatke iz evoropskog izveštaja</legend>
+
+    <ul class="nav nav-tabs">
+        <li><a th:href="@{/user/dodajUcesnikB/{idIzvm} (idIzvm=${idIzvm})}">Podaci dugog učesnika</a></li>
+        <li><a th:href="@{/user/dodajUgovaraca/{idIzvm}(idIzvm=${idIzvm})}"> Podaci o ugovaraču osiguranja drugog učesnika</a></li>
+        <li><a th:href="@{/user/dodajVoziloB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci dugog vozila</a></li>
+        <li><a th:href="@{/user/dodajPrikolicuB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci duge prikolice</a></li>
+        <li><a th:href="@{/user/dodajOsiguranjeblankB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci o osiguranju drugog učesnika</a></li>
+        <li><a th:href="@{/user/okolnostiNezgode/{idIzvm} (idIzvm=${idIzvm})}"> Podaci okolnosti nezgode i materijalne stete</a></li>
+        <li class="active"><a th:href="@{/user/zvanicniOrgani/{idIzvm} (idIzvm=${idIzvm})}"> Podaci zvaničnih organa</a></li>
+        <li><a th:href="@{/user/vremeNezgodeB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci o datumu i vremenu nezgode</a></li>
+    </ul>
+    <br/>
+    <div class="row">
+        <div class="col-md-10 ">
+
+            <form class="form-horizontal" th:action="@{/user/snimiZvanicneOrgane/{idIzvm}(idIzvm=${idIzvm})}" method="POST">
+                <div>
+                    <!-- Form Name -->
+                    <legend>Podaci zvaničnih organa</legend>
+
+                    <div>
+                        <span style="color: green" th:utext="${successMessage}"></span>
+                        <hr/>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="daLiJeSacinjenZvanicniIzvestaj">Da li je sačinjen zvanični izveštaj?</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:disabled="${poslat}? all" id="daLiJeSacinjenZvanicniIzvestaj" class="form-control" th:field="*{zvanicniOrganiDTO.daLiJeSacinjenZvanicniIzvestaj}" >
+                                    <option value="Ne" >Ne</option>
+                                    <option value="Da">Da</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Kada je sačinjen zvanični izveštaj?-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="odKogaJeSacinjenZvanicniIzvestaj">Kada je sačinjen zvanični izveštaj?</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input th:disabled="${poslat}? all" id="odKogaJeSacinjenZvanicniIzvestaj" th:value="*{zvanicniOrganiDTO.odKogaJeSacinjenZvanicniIzvestaj}" name="odKogaJeSacinjenZvanicniIzvestaj" type="date" placeholder="Koga je sačinjen zvanični izveštaj" class="form-control input-md">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--Broj vozačke dozvole-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="brojZvanicnogIzvestaja">Broj zvaničnog izvesataja</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input th:disabled="${poslat}? all" id="brojZvanicnogIzvestaja" th:value="*{zvanicniOrganiDTO.brojZvanicnogIzvestaja}" name="brojZvanicnogIzvestaja" type="number" placeholder="Br. zvaničnog izvestaja" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('zvanicniOrganiDTO.brojZvanicnogIzvestaja')}" th:errors="*{zvanicniOrganiDTO.brojZvanicnogIzvestaja}">Greska</span>
+                        </div>
+                    </div>
+
+                    <!--Da li je vozač podvrgnut alko testu?-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="daLiJeVozacPodvrgnutTestiranjuNarko">Da li je vozač podvrgnut alko testu?</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:disabled="${poslat}? all" id="daLiJeVozacPodvrgnutTestiranjuNarko" class="form-control" th:field="*{zvanicniOrganiDTO.daLiJeVozacPodvrgnutTestiranjuNarko}" >
+                                    <option value="Ne" >Ne</option>
+                                    <option value="Da">Da</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--Da li je vozač podvrgnut narko testu?-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="daLiJeVozacPodvrgnutTestiranjuAlko">Da li je vozač podvrgnut narko testu?</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:disabled="${poslat}? all" id="daLiJeVozacPodvrgnutTestiranjuAlko" class="form-control" th:field="*{zvanicniOrganiDTO.daLiJeVozacPodvrgnutTestiranjuAlko}" >
+                                    <option value="Ne" >Ne</option>
+                                    <option value="Da">Da</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--Da li je vozač odbio test?-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="daLiJeVozacOdbioTest">Da li je vozač odbio test?</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:disabled="${poslat}? all" id="daLiJeVozacOdbioTest" class="form-control" th:field="*{zvanicniOrganiDTO.daLiJeVozacOdbioTest}" >
+                                    <option value="Ne" >Ne</option>
+                                    <option value="Da">Da</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--Namena upotrebe mv-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="namenaUpotrebeMV">Namena upotrebe motornog vozila</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:disabled="${poslat}? all" id="namenaUpotrebeMV" class="form-control" th:field="*{zvanicniOrganiDTO.namenaUpotrebeMV}" >
+                                    <option value="privatno" >Privatno</option>
+                                    <option value="poslovno">Poslovno</option>
+                                    <option value="profesionalno">Profesionalno</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--Mesto-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="mestoPregledaVozila">Mesto pregleda motornog voliza</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input th:disabled="${poslat}? all" id="mestoPregledaVozila" th:value="*{zvanicniOrganiDTO.mestoPregledaVozila}" name="mestoPregledaVozila" type="text" placeholder="Mesto pregleda vozila" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('zvanicniOrganiDTO.mestoPregledaVozila')}" th:errors="*{zvanicniOrganiDTO.mestoPregledaVozila}">Greska</span>
+                        </div>
+                    </div>
+
+                    <!--Da li je vozilo imobilisano?-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="imobilisanoVozilo">Da li je vozilo imobilisano</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:disabled="${poslat}? all" id="imobilisanoVozilo" class="form-control" th:field="*{zvanicniOrganiDTO.imobilisanoVozilo}" >
+                                    <option value="Ne" >Ne</option>
+                                    <option value="Da">Da</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="number" th:field="${zvanicniOrganiDTO.id}" readonly="readonly" type="hidden" />
+                    </div>
+
+                    <div>
+                        <input type="number" th:field="${zvanicniOrganiDTO.version}" readonly="readonly" type="hidden" />
+                    </div>
+
+                    <div class="form-group" >
+                        <label class="col-md-4 control-label" ></label>
+                        <div class="col-md-4">
+                            <input th:remove="${poslat}? all" type="submit" class="btn btn-success" value="Snimi">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <hr/>
+            <a th:href="@{/user/detaljiIzvestajaManjaVozac/{idIzvm} (idIzvm=${idIzvm})}"><button type="button" class="btn btn-success" style="background-color: #3aa188 !important;
+                 border-color: #3aa188 !important;"><span class="glyphicon glyphicon-arrow-left"></span> Nazad</button></a>
+        </div>
+    </div>
+</div>
+</div>
+
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+    .col-md-4{
+        width: 35.93333333% !important;
+    }
+    .btn-success{
+        margin-top:20px !important;
+        background-color: #3aa188 !important;
+        border-color: #3aa188 !important;
+    }
+</style>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-header">
+                <a th:href="@{/user/home}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+            </div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <!-- Form Name -->
+    <legend>Popunite i pregledajte podatke iz evoropskog izveštaja</legend>
+
+    <ul class="nav nav-tabs">
+        <li><a th:href="@{/user/dodajUcesnikB/{idIzvm} (idIzvm=${idIzvm})}">Podaci dugog učesnika</a></li>
+        <li><a th:href="@{/user/dodajUgovaraca/{idIzvm}(idIzvm=${idIzvm})}"> Podaci o ugovaraču osiguranja drugog učesnika</a></li>
+        <li><a th:href="@{/user/dodajVoziloB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci dugog vozila</a></li>
+        <li><a th:href="@{/user/dodajPrikolicuB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci duge prikolice</a></li>
+        <li class="active"><a th:href="@{/user/dodajOsiguranjeblankB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci o osiguranju drugog učesnika</a></li>
+        <li><a th:href="@{/user/okolnostiNezgode/{idIzvm} (idIzvm=${idIzvm})}"> Podaci okolnosti nezgode i materijalne stete</a></li>
+        <li><a th:href="@{/user/zvanicniOrgani/{idIzvm} (idIzvm=${idIzvm})}"> Podaci zvaničnih organa</a></li>
+        <li><a th:href="@{/user/vremeNezgodeB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci o datumu i vremenu nezgode</a></li>
+    </ul>
+    <br/>
+    <div class="row">
+        <div class="col-md-10 ">
+            <form class="form-horizontal" th:action="@{/user/snimiOsiguranjeB/{idIzvm}(idIzvm=${idIzvm})}" method="POST">
+                <fieldset>
+                    <!-- Form Name -->
+                    <legend>Podaci o osiguranju drugog učesnika</legend>
+
+                    <div>
+                        <span style="color: green" th:utext="${successMessage}"></span>
+                        <hr/>
+                    </div>
+
+                    <!--Naziv osiguranja-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="naziv">Naziv osiguranja</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:field="*{osiguranjeBDTO.naziv}" id="naziv" class="form-control" >
+                                    <option th:each="lista : ${klijentiDTOS}"
+                                            th:value="${lista.name}"
+                                            th:text="${lista.name}"></option>
+                                </select>
+                                <span class="input-group-btn">
+                                    <a th:href="@{/user/dodajOsiguranjeblankB/{idIzvm} (idIzvm=${idIzvm})}"><button type="button" class="btn btn-primary btn-add" style="background-color: #3aa188 !important;
+                                            border-color: #3aa188 !important;">+</button></a>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <!--Država-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="drzava">Država</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:field="*{osiguranjeBDTO.drzava}" id="drzava" class="form-control" >
+                                    <!--/*@thymesVar id="getDrzava" type=""*/-->
+                                    <option th:each="drzave : ${listaDrzava}"
+                                            th:value="${drzave.drzava}"
+                                            th:text="${drzave.drzava}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Broj ugovora-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="brojUgovora">Broj ugovora</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input th:value="*{osiguranjeBDTO.brojUgovora}" id="brojUgovora" name="brojUgovora" type="number" placeholder="Broj ugovora" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('osiguranjeBDTO.brojUgovora')}" th:errors="*{osiguranjeBDTO.brojUgovora}">Greska</span>
+                        </div>
+                    </div>
+
+                    <!--Broj zelenog kartona-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="brojZelenogKartona">Broj zelenog kartona</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input th:value="*{osiguranjeBDTO.brojZelenogKartona}" id="brojZelenogKartona" name="brojZelenogKartona" type="number" placeholder="Broj zelenog kartona" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('osiguranjeBDTO.brojZelenogKartona')}" th:errors="*{osiguranjeBDTO.brojZelenogKartona}">Greska</span>
+                        </div>
+                    </div>
+
+                    <!--Polisa osiguranja vazi Od - Do-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label col-xs-12" for="polisaVaziOd">Zelini karton vazi od - do</label>
+                        <div class="col-md-2  col-xs-4">
+                            <input th:value="*{osiguranjeBDTO.polisaVaziOd}" id="polisaVaziOd" style="width: 160px;" tyle="width: 160px;" name="polisaVaziOd" type="date" placeholder="Polisa osiguranja vazi Od" class="form-control input-md">
+                        </div>
+                        <div class="col-md-2 col-xs-4">
+                            <input th:value="*{osiguranjeBDTO.polisaVaziDo}" id="polisaVaziDo" style="width: 160px;" name="polisaVaziDo" type="date" placeholder="Polisa osiguranja vazi Do" class="form-control input-md">
+                        </div>
+                    </div>
+
+
+                    <!--Zelini karton vazi od - do-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label col-xs-12" for="zeleniKartonVaziOd">Zelini karton vazi od - do</label>
+                        <div class="col-md-2  col-xs-4">
+                            <input th:value="*{osiguranjeBDTO.zeleniKartonVaziOd}" id="zeleniKartonVaziOd" style="width: 160px;" name="zeleniKartonVaziOd" type="date" placeholder="Zeleni karton važi Od" class="form-control input-md">
+                        </div>
+                        <div class="col-md-2 col-xs-4">
+                            <input th:value="*{osiguranjeBDTO.zeleniKartonVaziDo}" id="zeleniKartonVaziDo" style="width: 160px;" name="zeleniKartonVaziDo" type="date" placeholder="Zeleni karton važi Do" class="form-control input-md">
+                        </div>
+                    </div>
+
+
+
+                    <!--Filijala-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="filijala">Filijala</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input id="filijala" th:value="*{osiguranjeBDTO.filijala}"  name="filijala" type="text" placeholder="Filijala" class="form-control input-md">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Da li je materijalna steta osigurana ugovorom-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="materijalnaStetaOsiguranaUgovorom">Da li je materijalna steta osigurana ugovorom</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select id="materijalnaStetaOsiguranaUgovorom" class="form-control" th:field="*{osiguranjeBDTO.materijalnaStetaOsiguranaUgovorom}" >
+                                    <option value="Da">Da</option>
+                                    <option value="Ne" >Ne</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <input type="number" th:field="${osiguranjeBDTO.id}" readonly="readonly" type="hidden" />
+                        </div>
+
+                        <div>
+                            <input type="number" th:field="${osiguranjeBDTO.version}" readonly="readonly" type="hidden" />
+                        </div>
+
+
+                        <div class="form-group" >
+                            <label class="col-md-4 control-label" ></label>
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-success" value="Snimi">
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <hr/>
+            <a th:href="@{/user/detaljiIzvestajaManjaVozac/{idIzvm} (idIzvm=${idIzvm})}"><button type="button" class="btn btn-success" style="background-color: #3aa188 !important;
+                     border-color: #3aa188 !important;"><span class="glyphicon glyphicon-arrow-left"></span> Nazad</button></a>
+        </div>
+    </div>
+</div>
+
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+    .col-md-4{
+        width: 35.93333333% !important;
+    }
+    .btn-success{
+        margin-top:20px !important;
+        background-color: #3aa188 !important;
+        border-color: #3aa188 !important;
+    }
+</style>

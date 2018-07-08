@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<div>
+    <nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-header">
+                    <a th:href="@{/admin/adminIzvestajiVecaVozac}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+                </div>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a th:href="@{/admin/adminIzvestajiVecaVozac}">Izveštaji</a></li>
+                    <li><a th:href="@{/admin/adminPoslatiIzvestaji}">Poslati izveštaji</a></li>
+                    <li><a th:href="@{/admin/adminKlijentiLista}">Klijenti</a></li>
+                    <li><a th:href="@{/admin/adminKorisnici}">Korisnici aplikacije</a></li>
+                    <li><a th:href="@{/admin/adminPodesavanja}">Podešavanja</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                    <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <!-- Form Name -->
+        <legend>Pregled poslatih izveštaja</legend>
+        <hr/>
+        <ul class="nav nav-tabs">
+            <li><a th:href="@{/admin/adminPoslatiIzvestaji}">Izveštaji veća materijalna šteta - vozači</a></li>
+            <li class="active"><a th:href="@{/admin/adminPoslatiIzvestajiManja}"> Izveštaji manja materijalna šteta - vozači</a></li>
+            <li><a th:href="@{/admin/adminPoslatiIzvestajiPutnik}"> Izveštaji veća materijalna šteta - putnici</a></li>
+        </ul>
+        <br/>
+        <div class="row">
+            <div class="panel panel-primary filterable">
+                <div class="panel-heading" style="background-color: #3aa188 !important">
+                    <h3 class="panel-title">POSLATI IZVEŠTAJI MANJA MATERIJALNA ŠTETA - VOZAČI</h3>
+                    <div class="pull-right">
+                        <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Pretraga</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr class="filters">
+                        <th><input type="text" style="width: 50px" class="form-control" placeholder="#" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Ime" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Prezime" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Vozilo" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Reg. oznaka vozila" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Država osoguranja" disabled></th>
+                        <th><input type="text" class="form-control" placeholder="Osiguranje" disabled></th>
+                        <th align="center"><span class="glyphicon glyphicon-cog"></span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="vozacNezgodaManjaDTO:${vozacNezgodaManjaDTO}">
+                        <td th:text="${vozacNezgodaManjaDTO.id}"/>
+                        <td th:text="${vozacNezgodaManjaDTO.user.name}"/>
+                        <td th:text="${vozacNezgodaManjaDTO.user.lastName}"/>
+                        <td th:text="${vozacNezgodaManjaDTO.markaVozila}"/>
+                        <td th:text="${vozacNezgodaManjaDTO.regOznakaVoz}"/>
+                        <td th:text="${vozacNezgodaManjaDTO.drzava}"/>
+                        <td th:text="${vozacNezgodaManjaDTO.nazivOsiguranja}"/>
+                        <td align="center">
+                            <a th:href="@{/admin/stampaPDF/manja/{id}(id=${vozacNezgodaManjaDTO.id})}" class="btn btn-warning btn-sm btn-round"><span class="glyphicon glyphicon-align-justify"></span></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-md-1 control-label" for="pageSizeSelect">Br. stavki</label>
+                <div class="col-md-1">
+                    <div style="width: 100px" class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <select class="form-control"  id="pageSizeSelect">
+                            <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}"
+                                    th:selected="${pageSize} == ${selectedPageSize}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div th:if="${listaPIzvestajaManjaVozac.totalPages != 1}" class="form-group col-md-11 pagination-centered">
+                    <ul class="pagination">
+                        <li th:class="${listaPIzvestajaManjaVozac.number == 0} ? disabled">
+                            <a class="pageLink" th:href="@{/admin/adminPoslatiIzvestajiManja/(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+                        </li>
+                        <li th:class="${listaPIzvestajaManjaVozac.number == 0} ? disabled">
+                            <a class="pageLink" th:href="@{/admin/adminPoslatiIzvestajiManja/(pageSize=${selectedPageSize}, page=${listaPIzvestajaManjaVozac.number})}">&larr;</a>
+                        </li>
+                        <li th:class="${listaPIzvestajaManjaVozac.number == (page - 1)} ? 'active pointer-disabled'"
+                            th:each="page :  *{#numbers.sequence(pager.startPage, pager.endPage)}">
+                            <a class="pageLink" th:href="@{/admin/adminPoslatiIzvestajiManja/(pageSize=${selectedPageSize}, page=${page})}"
+                               th:text="${page}"></a>
+                        </li>
+                        <li th:class="${listaPIzvestajaManjaVozac.number + 1 == listaPIzvestajaManjaVozac.totalPages} ? disabled">
+                            <a class="pageLink"
+                               th:href="@{/admin/adminPoslatiIzvestajiManja/(pageSize=${selectedPageSize}, page=${listaPIzvestajaManjaVozac.number + 2})}">&rarr;</a>
+                        </li>
+                        <li th:class="${listaPIzvestajaManjaVozac.number + 1 == listaPIzvestajaManjaVozac.totalPages} ? disabled">
+                            <a class="pageLink"
+                               th:href="@{/admin/adminPoslatiIzvestajiManja/(pageSize=${selectedPageSize}, page=${listaPIzvestajaManjaVozac.totalPages})}">&raquo;</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <hr/>
+    </div>
+</div>
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script th:src="@{/js/izvestajPManja.js}"></script>
+</html>
+
+
+

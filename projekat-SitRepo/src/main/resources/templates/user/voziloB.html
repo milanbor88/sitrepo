@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+
+<nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-header">
+                <a th:href="@{/user/home}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+            </div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <!-- Form Name -->
+    <legend>Popunite i pregledajte podatke iz evoropskog izveštaja</legend>
+
+    <ul class="nav nav-tabs">
+        <li><a th:href="@{/user/dodajUcesnikB/{idIzvm} (idIzvm=${idIzvm})}">Podaci dugog učesnika</a></li>
+        <li><a th:href="@{/user/dodajUgovaraca/{idIzvm}(idIzvm=${idIzvm})}"> Podaci o ugovaraču osiguranja drugog učesnika</a></li>
+        <li class="active"><a th:href="@{/user/dodajVoziloB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci dugogm vozilu</a></li>
+        <li><a th:href="@{/user/dodajPrikolicuB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci duge prikolice</a></li>
+        <li><a th:href="@{/user/dodajOsiguranjeblankB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci o osiguranju drugog učesnika</a></li>
+        <li><a th:href="@{/user/okolnostiNezgode/{idIzvm} (idIzvm=${idIzvm})}"> Podaci okolnosti nezgode i materijalne stete</a></li>
+        <li><a th:href="@{/user/zvanicniOrgani/{idIzvm} (idIzvm=${idIzvm})}"> Podaci zvaničnih organa</a></li>
+        <li><a th:href="@{/user/vremeNezgodeB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci o datumu i vremenu nezgode</a></li>
+    </ul>
+    <br/>
+    <div class="row">
+        <div class="col-md-10 ">
+            <form class="form-horizontal"  th:action="@{/user/snimiVoziloB/{idIzvm}(idIzvm=${idIzvm})}" method="POST" enctype="multipart/form-data">
+                <fieldset>
+                    <!-- Form Name -->
+                    <legend>Podaci o dugogm vozilu</legend>
+
+                    <div>
+                        <span style="color: green" th:utext="${successMessage}"></span>
+                        <hr/>
+                    </div>
+
+                    <!--Marka vozila -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="marka">Marka vozila</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input th:disabled="${poslat}? all" th:value="*{voziloBDTO.marka}" id="marka" name="marka" type="text" placeholder="Marka vozila" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('voziloBDTO.marka')}" th:errors="*{voziloBDTO.marka}">Greska</span>
+                        </div>
+                    </div>
+
+
+                    <!--Tip vozil-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="tip">Tip vozila</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input th:disabled="${poslat}? all" th:value="*{voziloBDTO.tip}" id="tip" name="tip" type="text" placeholder="Tip vozila" class="form-control input-md">
+                                <!--<select th:field="*{vozilo.tip}" id="model" class="form-control" >-->
+                                <!--<option th:each="tip : ${listaTipova}"-->
+                                <!--th:value="${tip.model}"-->
+                                <!--th:text="${tip.model}"></option>-->
+                                <!--</select>-->
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('voziloBDTO.tip')}" th:errors="*{voziloBDTO.tip}">Greska</span>
+                        </div>
+                    </div>
+
+
+                    <!-- File Button -->
+                    <div th:remove="${poslat}? all" class="form-group">
+                        <label class="col-md-4 control-label" for="Upload photo">Ubacite sliku vozila</label>
+                        <div class="col-md-4">
+                            <input id="Upload photo" name="fileUpload" class="input-file" type="file">
+                        </div>
+                    </div>
+
+                    <!--Registarska oznaka vozila-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="registarskaOznakaVO">Registarska oznaka vozila</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input th:disabled="${poslat}? all" th:value="*{voziloBDTO.registarskaOznakaVO}" id="registarskaOznakaVO" name="registarskaOznakaVO" type="text" placeholder="Registarska oznaka vozila" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('voziloBDTO.registarskaOznakaVO')}" th:errors="*{voziloBDTO.registarskaOznakaVO}">Greska</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="drzava">Drzava registracije</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <select th:disabled="${poslat}? all"  th:field="*{voziloBDTO.drzavaUKojojJeVoziloRegistrovano}" id="drzava" class="form-control" >
+                                    <option th:each="drzave : ${drzaveDTOS}"
+                                            th:value="${drzave.drzava}"
+                                            th:text="${drzave.drzava}"></option>
+                                </select>
+                            </div>
+                            <!--<span style="color: #FF1C19" th:if="${#fields.hasErrors('naziv')}" th:errors="*{naziv}">Greska</span>-->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" ></label>
+                        <div class="col-md-4">
+                            <input th:remove="${poslat}? all" type="submit" data-toggle="page-alert" data-toggle-id="1" class="btn btn-success" value="Snimi">
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="number" th:field="*{voziloBDTO.id}" readonly="readonly" type="hidden" />
+                    </div>
+
+                    <div>
+                        <input th:remove="${poslat}? all" type="number" th:field="*{voziloBDTO.version}" readonly="readonly" type="hidden" />
+                    </div>
+                </fieldset>
+            </form>
+
+            <hr/>
+            <a th:href="@{/user/detaljiIzvestajaManjaVozac/{idIzvm} (idIzvm=${idIzvm})}"><button type="button" class="btn btn-success" style="background-color: #3aa188 !important;
+                border-color: #3aa188 !important;"><span class="glyphicon glyphicon-arrow-left"></span> Nazad</button></a>
+        </div>
+        <div class="col-md-2 hidden-xs">
+            <img id="myImg" th:src="@{/user/imagevoziloB/{id} (id=${voziloBDTO.id})}" class="img-responsive img-thumbnail" th:onerror="'this.src=\'' + @{/images/default-slider-image.png} + '\';'" />
+        </div>
+
+        <div id="myModal" class="modal" style="z-index:1000;">
+            <img class="modal-content" id="img01">
+        </div>
+    </div>
+</div>
+
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+    #myImg {
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: block;
+        margin-left: auto;
+        margin-right: auto
+    }
+
+    #myImg:hover {opacity: 0.7;}
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+    }
+
+    /* Modal Content (image) */
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 75%;
+    //max-width: 75%;
+    }
+
+    /* Caption of Modal Image */
+    #caption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    /* Add Animation */
+    .modal-content, #caption {
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    .out {
+        animation-name: zoom-out;
+        animation-duration: 0.6s;
+    }
+
+    @-webkit-keyframes zoom {
+        from {-webkit-transform:scale(1)}
+        to {-webkit-transform:scale(2)}
+    }
+
+    @keyframes zoom {
+        from {transform:scale(0.4)}
+        to {transform:scale(1)}
+    }
+
+    @keyframes zoom-out {
+        from {transform:scale(1)}
+        to {transform:scale(0)}
+    }
+
+    /* The Close Button */
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* 100% Image Width on Smaller Screens */
+    @media only screen and (max-width: 700px){
+        .modal-content {
+            width: 100%;
+        }
+    }
+    .btn-success{
+        background-color: #3aa188 !important;
+        border-color: #3aa188 !important;
+    }
+</style>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById('myModal');
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var img = document.getElementById('myImg');
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    img.onclick = function(){
+        modal.style.display = "block";
+        modalImg.src = this.src;
+        modalImg.alt = this.alt;
+        captionText.innerHTML = this.alt;
+    }
+
+
+    // When the user clicks on <span> (x), close the modal
+    modal.onclick = function() {
+        img01.className += " out";
+        setTimeout(function() {
+            modal.style.display = "none";
+            img01.className = "modal-content";
+        }, 400);
+
+    }
+</script>

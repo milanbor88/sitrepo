@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<div>
+    <nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-header">
+                    <a th:href="@{/user/home}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+                </div>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav">
+                        <a th:href="@{/user/dodajUcesnikB/{idIzvm} (idIzvm=${idIzvm})}" class="btn btn-sm btn-danger" style="margin-top: 10px;" ><span class="glyphicon glyphicon-plus" aria-hidden="true" data-target="#myModal"></span> Popunite evropski izveštaj</a>
+                    </ul>
+                    <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                    <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <h3>Pregled detalja izveštaja sa manjom materijalnom štetom u ulozi vozača</h3>
+        <hr/>
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse6"><span class="glyphicon glyphicon-chevron-right"></span> Dokazi o saobraćajnoj nezgodi</a>
+            </h4>
+        </div>
+
+        <div id="collapse6" class="collapse collapse in">
+
+            <ul th:remove="${poslat}? all" class="nav nav-tabs">
+                <li><a th:href="@{/user/detaljiIzvestajaManjaVozacSO/{idIzvm}(idIzvm=${idIzvm})}">Fotografiju sopstvenog vozila</a></li>
+                <li><a th:href="@{/user/detaljiIzvestajaManjaVozacTV/{idIzvm}(idIzvm=${idIzvm})}"> Fotografiju tudjeg vozila</a></li>
+                <li class="active"><a th:href="@{/user/detaljiIzvestajaManjaVozacEI/{idIzvm}(idIzvm=${idIzvm})}"> Fotografiju evropskog izvestaja</a></li>
+            </ul>
+
+            <div th:remove="${poslat}? all" class="tab-content">
+                <div id="putnik1" class="tab-pane fade in active">
+                    <form class="form-horizontal" th:action="@{/user/dokazi/evropski/{idIzvm} (idIzvm=${idIzvm})}" enctype="multipart/form-data" method="POST">
+                        <hr/>
+                        <div>
+                            <span style="color: green" th:utext="${successMessage}"></span>
+                            <hr/>
+                        </div>
+                        <!-- File Button -->
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label class="col-md-4 control-label" for="Upload photo35">Ubacite fotografiju evropskog izvestaja</label>
+                            <div class="col-md-4">
+                                <input id="Upload photo35" name="fileUpload" class="input-file" type="file">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" ></label>
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-success" style="background-color: #3aa188 !important;
+        border-color: #3aa188 !important;" value="Snimi">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="container">
+
+                <br/>
+                <div class="row">
+
+                    <div>
+                        <button class="btn btn-default filter-button active" data-filter="all">Sve fotografije</button>
+                        <button class="btn btn-default filter-button" data-filter="svoje">Fotografije sopstvenog vozila</button>
+                        <button class="btn btn-default filter-button" data-filter="tudje">Fotografije tudjeg vozila</button>
+                        <button class="btn btn-default filter-button" data-filter="evropski">Evropski izvestaj o saoraćajnoj nezgodi</button>
+                    </div>
+                    <br/>
+
+                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter svoje" th:each="evropskiIzvestajIDokazisSopstveno:${evropskiIzvestajIDokazisSopstveno}">
+                        <img th:src="@{/user/imageEvropskiIzvestajIDokazi/{id}(id=${evropskiIzvestajIDokazisSopstveno.id})}" class="img-responsive img-thumbnail">
+                    </div>
+
+                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter tudje" th:each="evropskiIzvestajIDokazisTudje:${evropskiIzvestajIDokazisTudje}">
+                        <img th:src="@{/user/imageEvropskiIzvestajIDokazi/{id}(id=${evropskiIzvestajIDokazisTudje.id})}" class="img-responsive img-thumbnail">
+                    </div>
+
+                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter evropski" th:each="evropskiIzvestajIDokazisEvrIzv:${evropskiIzvestajIDokazisEvrIzv}">
+                        <img th:src="@{/user/imageEvropskiIzvestajIDokazi/{id}(id=${evropskiIzvestajIDokazisEvrIzv.id})}" class="img-responsive img-thumbnail">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse7"><span class="glyphicon glyphicon-chevron-right"></span> Podaci o svedocima</a>
+            </h4>
+        </div>
+
+        <div id="collapse7" class="collapse">
+
+            <div class="container">
+                <div class="row">
+                    <div class="panel panel-primary filterable">
+                        <div class="panel-heading" style="background-color: #3aa188 !important">
+                            <h3 class="panel-title">SVEDOCI</h3>
+                            <div class="pull-right">
+                                <a th:remove="${poslat}? all"  th:href="@{/user/dodajSvedokaManja/{idIzvm}(idIzvm=${idIzvm})}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span> Dodaj svedoka</a>
+                                <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Pretraga</button>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <thead>
+                            <tr class="filters">
+                                <th>Fotografija lične karte</th>
+                                <th><input type="text" class="form-control" placeholder="Ime" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Prezime" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Adresa" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Telefon" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Br. lične karte" disabled></th>
+                                <th align="center"><span class="glyphicon glyphicon-cog"></span></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="vozacSvedoks:${vozacSvedoks}">
+                                <td>
+                                    <img th:src="@{/user/imageVozacSvedok/{id}(id=${vozacSvedoks.id})}"  style="width: 80px !important" class="img-responsive img-responsive"/>
+                                </td>
+                                <td th:text="${vozacSvedoks.ime}"/>
+                                <td th:text="${vozacSvedoks.prezime}"/>
+                                <td th:text="${vozacSvedoks.adresa}"/>
+                                <td th:text="${vozacSvedoks.telefon}"/>
+                                <td th:text="${vozacSvedoks.brLicneKarte}"/>
+                                <td style="align: center">
+                                    <a th:remove="${poslat}? all"  th:href="@{/user/obrisiVozacaSvedokaManja/{id}/{idIzvm} (id=${vozacSvedoks.id}, idIzvm=${idIzvm})}" class="btn btn-warning btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse8"><span class="glyphicon glyphicon-chevron-right"></span> Podaci o poveredejnim učesnicima</a>
+            </h4>
+        </div>
+
+        <div id="collapse8" class="collapse">
+            <div class="tab-content">
+
+                <div class="container">
+                    <div class="row">
+                        <div class="panel panel-primary filterable">
+                            <div class="panel-heading" style="background-color: #3aa188 !important">
+                                <h3 class="panel-title">PODACI O POVREDJENIM UČESNICIMA U VAŠEM VOZILU</h3>
+                                <div class="pull-right">
+                                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Pretraga</button>
+                                </div>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                <tr class="filters">
+                                    <th><input type="text" class="form-control" placeholder="Ime" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Prezime" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Adresa" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Telefon" disabled></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="povredjeniVaseVoziloMS:${povredjeniVaseVoziloMS}">
+                                    <td th:text="*{povredjeniVaseVoziloMS.ime}"/>
+                                    <td th:text="*{povredjeniVaseVoziloMS.prezime}"/>
+                                    <td th:text="*{povredjeniVaseVoziloMS.adresa}"/>
+                                    <td th:text="*{povredjeniVaseVoziloMS.telefon}"/>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="container">
+                    <div class="row">
+                        <div class="panel panel-primary filterable">
+                            <div class="panel-heading" style="background-color: #3aa188 !important">
+                                <h3 class="panel-title">PODACI O POVREDJENIM UČESNICIMA U DRUGOM VOZILU</h3>
+                                <div class="pull-right">
+                                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Pretraga</button>
+                                </div>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                <tr class="filters">
+                                    <th><input type="text" class="form-control" placeholder="Ime" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Prezime" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Adresa" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Telefon" disabled></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="povredjeniDrugoVoziloMS:${povredjeniDrugoVoziloMS}">
+                                    <td th:text="*{povredjeniDrugoVoziloMS.ime}"/>
+                                    <td th:text="*{povredjeniDrugoVoziloMS.prezime}"/>
+                                    <td th:text="*{povredjeniDrugoVoziloMS.adresa}"/>
+                                    <td th:text="*{povredjeniDrugoVoziloMS.telefon}"/>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="panel panel-primary filterable">
+                            <div class="panel-heading" style="background-color: #3aa188 !important">
+                                <h3 class="panel-title">PODACI O POVREDJENIM UČESNICIMA VAN VOZILA</h3>
+                                <div class="pull-right">
+                                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Pretraga</button>
+                                </div>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                <tr class="filters">
+                                    <th><input type="text" class="form-control" placeholder="Ime" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Prezime" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Adresa" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Telefon" disabled></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="povredjeniVanVozilaMS:${povredjeniVanVozilaMS}">
+                                    <td th:text="*{povredjeniVanVozilaMS.ime}"/>
+                                    <td th:text="*{povredjeniVanVozilaMS.prezime}"/>
+                                    <td th:text="*{povredjeniVanVozilaMS.adresa}"/>
+                                    <td th:text="*{povredjeniVanVozilaMS.telefon}"/>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="col-md-4">
+            <a th:href="@{/user/nazadManja}"><button type="button" class="btn btn-success" style="background-color: #3aa188 !important;
+        border-color: #3aa188 !important;"><span class="glyphicon glyphicon-arrow-left"></span> Nazad</button></a>
+        </div>
+    </div>
+</div>
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+</div>
+
+<!--<div sec:authorize="hasAuthority('USER')">-->
+<!--Ovde moze pristupiti samo USER-->
+<!--</div>-->
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $(".filter-button").click(function(){
+            var value = $(this).attr('data-filter');
+
+            if(value == "all")
+            {
+                //$('.filter').removeClass('hidden');
+                $('.filter').show('1000');
+            }
+            else
+            {
+                $(".filter").not('.'+value).hide('3000');
+                $('.filter').filter('.'+value).show('3000');
+
+            }
+        });
+
+        if ($(".filter-button").removeClass("active")) {
+            $(this).removeClass("active");
+        }
+        $(this).addClass("active");
+
+    });
+
+
+    $(function() {
+        $.fn.showField = function() {
+            var selectVal = document.getElementById(this.val() + 'Div');
+            return this.each(function() {
+                $(selectVal).show().siblings('div').hide();
+            });
+        };
+        $('select#reportsSelect').change(function() {
+            $(this).showField();
+        });
+    });
+
+    $(document).ready(function(){
+        $('.filterable .btn-filter').click(function(){
+            var $panel = $(this).parents('.filterable'),
+                $filters = $panel.find('.filters input'),
+                $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                $tbody.find('.no-result').remove();
+                $tbody.find('tr').show();
+            }
+        });
+
+        $('.filterable .filters input').keyup(function(e){
+            /* Ignore tab key */
+            var code = e.keyCode || e.which;
+            if (code == '9') return;
+            /* Useful DOM data and selectors */
+            var $input = $(this),
+                inputContent = $input.val().toLowerCase(),
+                $panel = $input.parents('.filterable'),
+                column = $panel.find('.filters th').index($input.parents('th')),
+                $table = $panel.find('.table'),
+                $rows = $table.find('tbody tr');
+            /* Dirtiest filter function ever ;) */
+            var $filteredRows = $rows.filter(function(){
+                var value = $(this).find('td').eq(column).text().toLowerCase();
+                return value.indexOf(inputContent) === -1;
+            });
+            /* Clean previous no-result if exist */
+            $table.find('tbody .no-result').remove();
+            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+            $rows.show();
+            $filteredRows.hide();
+            /* Prepend no-result row if all rows are filtered */
+            if ($filteredRows.length === $rows.length) {
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+            }
+        });
+    });
+
+</script>
+
+<style>
+    .img-thumbnail{
+        width: 150px !important;
+        height: 100px !important;
+    }
+
+    .btn-primary{
+        background-color: #3aa188 !important;
+        border-color: #3aa188 !important;
+    }
+
+    .gallery-title
+    {
+        font-size: 36px;
+        color: #3aa188;
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 70px;
+    }
+    .gallery-title:after {
+        content: "";
+        position: absolute;
+        width: 7.5%;
+        left: 46.5%;
+        height: 45px;
+        border-bottom: 1px solid #5e5e5e;
+    }
+    .filter-button
+    {
+        font-size: 18px;
+        border: 1px solid #3aa188;
+        border-radius: 5px;
+        text-align: center;
+        color: #3aa188;
+        margin-bottom: 30px;
+
+    }
+    .filter-button:hover
+    {
+        font-size: 18px;
+        border: 1px solid #3aa188;
+        border-radius: 5px;
+        text-align: center;
+        color: #ffffff;
+        background-color: #3aa188;
+
+    }
+    .btn-default:active .filter-button:active
+    {
+        background-color: #3aa188;
+        color: white;
+    }
+
+    .port-image
+    {
+        width: 100%;
+    }
+
+    .gallery_product
+    {
+        margin-bottom: 30px;
+    }
+
+    .img-thumbnail{
+        width: 150px !important;
+        height: 100px !important;
+    }
+    .filterable {
+        margin-top: 15px;
+    }
+    .filterable .panel-heading .pull-right {
+        margin-top: -20px;
+    }
+    .filterable .filters input[disabled] {
+        background-color: transparent;
+        border: none;
+        cursor: auto;
+        box-shadow: none;
+        padding: 0;
+        height: auto;
+    }
+    .filterable .filters input[disabled]::-webkit-input-placeholder {
+        color: #333;
+    }
+    .filterable .filters input[disabled]::-moz-placeholder {
+        color: #333;
+    }
+    .filterable .filters input[disabled]:-ms-input-placeholder {
+        color: #333;
+    }
+</style>
+
+
+

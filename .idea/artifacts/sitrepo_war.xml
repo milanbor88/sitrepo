@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="sitrepo:war">
+    <output-path>$PROJECT_DIR$/projekat-SitRepo/target</output-path>
+    <root id="archive" name="sitrepo-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="sitrepo:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+
+<nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-header">
+                <a th:href="@{/user/home}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+            </div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 ">
+            <form class="form-horizontal" th:action="@{/user/snimiSvedokaPutnika/{idIzvp}(idIzvp=${idIzvp})}" enctype="multipart/form-data" method="POST">
+                <fieldset>
+                    <!-- Form Name -->
+                    <legend>Dodaj novog svedoka</legend>
+
+                    <div>
+                        <span style="color: green" th:utext="${successMessage}"></span>
+                        <hr/>
+                    </div>
+
+
+                    <!--Ime-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="ime">Ime</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input id="ime" name="ime" type="text" placeholder="Ime" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('putnikSvedokDTO.ime')}" th:errors="*{putnikSvedokDTO.ime}">Greska</span>
+                        </div>
+                    </div>
+
+                    <!--prezime-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="prezime">Prezime</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input id="prezime" name="prezime" type="text" placeholder="Prezime" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('putnikSvedokDTO.prezime')}" th:errors="*{putnikSvedokDTO.prezime}">Greska</span>
+                        </div>
+                    </div>
+
+                    <!-- File Button -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="Upload photo">Ubacite fotografiju Lične karte</label>
+                        <div class="col-md-4">
+                            <input id="Upload photo" name="fileUpload" class="input-file" type="file">
+                        </div>
+                    </div>
+
+                    <!--adresa-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="adresa">Adresa</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input id="adresa" name="adresa" type="text" placeholder="Adresa" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('putnikSvedokDTO.adresa')}" th:errors="*{putnikSvedokDTO.adresa}">Greska</span>
+                        </div>
+                    </div>
+
+                    <!--telefon-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="telefon">Telefon</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input id="telefon" name="telefon" type="number" placeholder="Telefon" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('putnikSvedokDTO.telefon')}" th:errors="*{putnikSvedokDTO.telefon}">Greska</span>
+                        </div>
+                    </div>
+
+                    <!--Br. licne karte-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="brLicneKarte">Br. lične karte</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user">
+                                    </i>
+                                </div>
+                                <input id="brLicneKarte" name="brLicneKarte" type="number" placeholder="Br. lične karte" class="form-control input-md">
+                            </div>
+                            <span style="color: #FF1C19" th:if="${#fields.hasErrors('putnikSvedokDTO.brLicneKarte')}" th:errors="*{putnikSvedokDTO.brLicneKarte}">Greska</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <input type="number" th:field="*{putnikSvedokDTO.id}" readonly="readonly" type="hidden" />
+                    </div>
+
+                    <div>
+                        <input type="number" th:field="*{putnikSvedokDTO.version}" readonly="readonly" type="hidden" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" ></label>
+                        <div class="col-md-4">
+                            <a th:href="@{/user/nazadDetaljizvestajaNezgodaPutnik/{idIzvp}(idIzvp=${idIzvp})}"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-arrow-left"></span> Nazad</button></a>
+                            <input type="submit" class="btn btn-success" value="Snimi">
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+    .btn-success{
+        background-color: #3aa188 !important;
+        border-color: #3aa188 !important;
+    }
+</style>

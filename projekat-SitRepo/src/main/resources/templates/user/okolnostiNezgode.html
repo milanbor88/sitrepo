@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-header">
+                <a th:href="@{/user/home}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+            </div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <!-- Form Name -->
+    <legend>Popunite i pregledajte podatke iz evoropskog izveštaja</legend>
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a th:href="@{/user/dodajUcesnikB/{idIzvm} (idIzvm=${idIzvm})}">Podaci dugog učesnika</a></li>
+        <li><a th:href="@{/user/dodajUgovaraca/{idIzvm}(idIzvm=${idIzvm})}"> Podaci o ugovaraču osiguranja drugog učesnika</a></li>
+        <li><a th:href="@{/user/dodajVoziloB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci dugog vozila</a></li>
+        <li><a th:href="@{/user/dodajPrikolicuB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci duge prikolice</a></li>
+        <li><a th:href="@{/user/dodajOsiguranjeblankB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci o osiguranju drugog učesnika</a></li>
+        <li class="active"><a th:href="@{/user/okolnostiNezgode/{idIzvm} (idIzvm=${idIzvm})}"> Podaci okolnosti nezgode i materijalne stete</a></li>
+        <li><a th:href="@{/user/zvanicniOrgani/{idIzvm} (idIzvm=${idIzvm})}"> Podaci zvaničnih organa</a></li>
+        <li><a th:href="@{/user/vremeNezgodeB/{idIzvm} (idIzvm=${idIzvm})}"> Podaci o datumu i vremenu nezgode</a></li>
+    </ul>
+    <br/>
+    <div class="row">
+        <div class="col-md-10 ">
+
+            <form class="form-horizontal" th:action="@{/user/snimiOkolnostiNezgode/{idIzvm}(idIzvm=${idIzvm})}" method="POST">
+                <div>
+                    <!-- Form Name -->
+                    <legend>Podaci o materijalnoj šteti i okolnostima nezgode u evropskom izveštaju</legend>
+
+                    <div>
+                        <span style="color: green" th:utext="${successMessage}"></span>
+                        <hr/>
+                    </div>
+                    <div class="well well-sm">
+                        <div class="media">
+                            <h4>Materijalna steta</h4>
+                            <hr/>
+                            <!--Materijalna steta-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <label class="col-md-4 control-label col-xs-12" style="text-align: center"> Vaše vozilo</label>
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.materijalnaSteta}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin-top: 45px;"> Materijalna šteta</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 25px;">
+                                    <label class="col-md-4 control-label col-xs-12" style="text-align: center"> Drugo vozilo</label>
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.materijalnaStetaB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Napustio parking/Otvarao vratan-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <textarea th:disabled="${poslat}? all" th:field="${okolnostiNezgodeDTO.mestoInicijalnogUdara}" class="form-control" rows="4" name="Overview (max 200 words)"></textarea>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Opišite mesto udara na vozilu</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <textarea th:disabled="${poslat}? all" th:field="${okolnostiNezgodeBDTO.mestoInicijalnogUdaraB}" class="form-control" rows="4" name="Overview (max 200 words)"></textarea>
+                                </div>
+                            </div>
+                            <!--Napustio parking/Otvarao vratan-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <textarea th:disabled="${poslat}? all" th:field="${okolnostiNezgodeDTO.vidljivaOstecenja}" class="form-control" rows="4" name="Overview (max 200 words)"></textarea>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Navedite vidljiva oštećenja na volilu</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <textarea th:disabled="${poslat}? all" th:field="${okolnostiNezgodeBDTO.vidljivaOstecenjaB}" class="form-control" rows="4" name="Overview (max 200 words)"></textarea>
+                                </div>
+                            </div>
+                            <hr/>
+                            <h4>Okolnosti koje su dovele do nezgode</h4>
+                            <hr/>
+
+
+                            <!--Parkiran/Zaustavljen-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <label class="col-md-4 control-label col-xs-12" style="text-align: center"> Vaše vozilo</label>
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.parkiranZaustavljen}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin-top: 45px;"> Parkiran/Zaustavljen</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <label class="col-md-4 control-label col-xs-12" style="text-align: center"> Drugo vozilo</label>
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.parkiranZaustavljenB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Napustio parking/Otvarao vrata-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.napustioParkingOtvaraoVrata}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Napustio parking/Otvarao vrata</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.napustioParkingOtvaraoVrataB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Parkirao-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.parkirao}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Parkirao</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.parkiraoB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Napustio parking,privatni posed,put-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.napustioParkingPrivatniposedPut}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Napustio parking,privatni posed,put</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.napustioParkingPrivatniposedPutB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Poceo da skrece na parking,privatni posed,put-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.poceodaSkreceParkingPrivatniposedPut}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Počeo da skreće na parking,privatni posed,put</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.poceodaSkreceParkingPrivatniposedPutB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Upravo ulazio u kruzni tok-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.upravoUlaziUKruzniTok}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Upravo ulazio u kružni tok</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.upravoUlaziUKruzniTokB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Prolazio kruzni tok-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.prolaziKruzniTok}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Prolazio kruzni tok</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.prolaziKruzniTokB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Naleteo tokom vožnje u istom smeru i u istoj traci na zadnji deo vozila-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.naleteoNaZadnjiDeoVozila}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Naleteo tokom vožnje u istom smeru i u istoj traci na zadnji deo vozila</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.naleteoNaZadnjiDeoVozilaB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Vzio u istom smeru a u drugoj traci-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.vozioUistomSemeruAuDrugojTraci}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Vozio u istom smeru a u drugoj traci</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.vozioUistomSemeruAuDrugojTraciB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Menjao traku-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.meanjaoTraku}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Menjao traku</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.meanjaoTrakuB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Preticao-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.preticao}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Preticao</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.preticaoB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Skretao udesno-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.skretaoUdesno}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Skretao udesno</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.skretaoUdesnoB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Skretao ulevo-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.skretaoUlevo}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Skretao ulevo</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.skretaoUlevoB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Skretao unazad-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.vozioUnazad}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Skretao unazad</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.vozioUnazadB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Presao u traku koja je predvidjena za skretanje vozila u suprotnom smeru-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.presaoUtrakuSuprotnogSmera}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Presao u traku koja je predvidjena za skretanje vozila u suprotnom smeru</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.presaoUtrakuSuprotnogSmeraB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Dolazio sa desne strane (na raskrsnici)-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.dolaziSaDesneStraneNaRaskrsnici}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Dolazio sa desne strane (na raskrsnici)</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.dolaziSaDesneStraneNaRaskrsniciB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Nije postovao znak prednosti ili crveno svetlo na semaforu-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeDTO.nijePostovaoZnak}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Nije poštovao znak prednosti ili crveno svetlo na semaforu</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <select th:disabled="${poslat}? all" class="form-control" th:field="${okolnostiNezgodeBDTO.nijePostovaoZnakB}">
+                                        <option value="Ne" >Ne</option>
+                                        <option value="Da">Da</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--Vlastite napomene-->
+                            <div class="form-group" style="margin-left: 80px;">
+
+                                <div class="col-md-3 col-xs-4">
+                                    <textarea th:disabled="${poslat}? all" th:field="${okolnostiNezgodeDTO.vlastiteNapomene}" class="form-control" rows="4" name="Overview (max 200 words)"></textarea>
+                                </div>
+                                <label class="col-md-3 control-label col-xs-12" style="text-align: center; margin: 2px;"> Vlastite napomene</label>
+                                <div class="col-md-3 col-xs-4" style="margin-left: 20px;">
+                                    <textarea th:disabled="${poslat}? all" th:field="${okolnostiNezgodeBDTO.vlastiteNapomeneB}" class="form-control" rows="4" name="Overview (max 200 words)"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="number" th:field="${okolnostiNezgodeDTO.id}" readonly="readonly" type="hidden" />
+                    </div>
+                    <div>
+                        <input type="number" th:field="${okolnostiNezgodeDTO.version}" readonly="readonly" type="hidden" />
+                    </div>
+
+                    <div>
+                        <input type="number" th:field="${okolnostiNezgodeBDTO.idB}" readonly="readonly" type="hidden" />
+                    </div>
+                    <div>
+                        <input type="number" th:field="${okolnostiNezgodeBDTO.versionB}" readonly="readonly" type="hidden" />
+                    </div>
+
+                    <div class="form-group" >
+                        <label class="col-md-4 control-label" ></label>
+                        <div class="col-md-4">
+                            <input th:remove="${poslat}? all" type="submit" class="btn btn-success" value="Snimi">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <hr/>
+            <a th:href="@{/user/detaljiIzvestajaManjaVozac/{idIzvm} (idIzvm=${idIzvm})}"><button type="button" class="btn btn-success" style="background-color: #3aa188 !important;
+                     border-color: #3aa188 !important;"><span class="glyphicon glyphicon-arrow-left"></span> Nazad</button></a>
+        </div>
+    </div>
+</div>
+</div>
+
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+    .col-md-4{
+        width: 35.93333333% !important;
+    }
+    .btn-success{
+        margin-top:20px !important;
+        background-color: #3aa188 !important;
+        border-color: #3aa188 !important;
+    }
+</style>

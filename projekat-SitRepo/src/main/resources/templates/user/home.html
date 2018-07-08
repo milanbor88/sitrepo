@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Page SitRepo</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body xmlns:th="http://www.w3.org/1999/xhtml">
+<div>
+
+    <nav class="navbar navbar-inverse" style="border-radius: 0px!important;">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-header">
+                    <a th:href="@{/user/home}"><img th:src="@{/images/logo.png}" style="width: 80px; margin-top: 11px; margin-right: 10px; padding: 4px;"/></a>
+                </div>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+
+                    <li><a th:href="@{/user/home}">Pregled izaveštaja</a></li>
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Pregled i dopuna vašeg naloga
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/user/user}">Podaci o korisnika</a></li>
+                            <li><a th:href="@{/user/vozilo}">Podaci o vozilu</a></li>
+                            <li><a th:href="@{/user/prikolica}">Podaci o prikolici</a></li>
+                            <li><a th:href="@{/user/osiguranjeblank}">Podaci o osiguranju</a></li>
+                            <li><a th:href="@{/user/ugovarac}">Podaci o ugovarču osiguranja</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a><span class="glyphicon glyphicon-user">&nbsp;</span><span th:utext="${userName}"/></a></li>
+                    <li><a th:href="@{/logout}" method="get"><span class="glyphicon glyphicon-log-in"></span> Izlaz</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container">
+
+        <h1 th:text="#{welcome.message}"></h1>
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a th:href="@{/user/home}" th:text="#{info.veca}"></a></li>
+            <li><a th:href="@{/user/manjaSteta}" th:text="#{info.manja}"></a></li>
+            <li><a th:href="@{/user/nezgodaPutnik}"> Nezgoda u slučaju putnika</a></li>
+        </ul>
+
+
+        <h3>Pregled izveštaja sa većom materijalnom štetom u ulozi vozača</h3>
+        <hr/>
+
+        <div class="container">
+            <div class="row">
+                <div class="panel panel-primary filterable">
+                    <div class="panel-heading" style="background-color: #3aa188 !important">
+                        <h3 class="panel-title">IZVEŠTAJI</h3>
+                        <div class="pull-right">
+                            <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Pretraga</button>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                        <tr class="filters">
+                            <th><input type="text" style="width: 50px" class="form-control" placeholder="#" disabled></th>
+                            <th><input type="text" class="form-control" th:placeholder="#{info.manja}" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Prezime" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Vozilo" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Reg. oznaka prikolice" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Ugovarač osiguranja" disabled></th>
+                            <th><input type="text" class="form-control" placeholder="Osiguranje" disabled></th>
+                            <th align="center"><span class="glyphicon glyphicon-cog"></span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr th:each="listaIzvestajaVecaVozac:${listaIzvestajaVecaVozac}">
+                            <td th:text="${listaIzvestajaVecaVozac.id}"/>
+                            <td th:text="${user.name}"/>
+                            <td th:text="${user.lastName}"/>
+                            <td th:text="${voziloDTO.marka}"/>
+                            <td th:text="${prikolicaDTO.registarskaOznaka}"/>
+                            <td th:text="${ugovaracOsiguranjaDTO.imePrezimeUO} "/>
+                            <td th:text="${osiguranjeDTO.naziv}"/>
+                            <td align="center">
+                                <a th:href="@{/user/detaljiIzvestajaVecaVozac/{id}(id=${listaIzvestajaVecaVozac.id})}" class="btn btn-warning btn-sm btn-round"><span class="glyphicon glyphicon-align-justify"></span></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <hr/>
+    </div>
+</div>
+</div>
+<img th:src="@{/images/logo.png}" style=" position: fixed; right: 40px; bottom: 40px;"/>
+</div>
+
+<!--<div sec:authorize="hasAuthority('USER')">-->
+<!--Ovde moze pristupiti samo USER-->
+<!--</div>-->
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('.filterable .btn-filter').click(function(){
+            var $panel = $(this).parents('.filterable'),
+                $filters = $panel.find('.filters input'),
+                $tbody = $panel.find('.table tbody');
+            if ($filters.prop('disabled') == true) {
+                $filters.prop('disabled', false);
+                $filters.first().focus();
+            } else {
+                $filters.val('').prop('disabled', true);
+                $tbody.find('.no-result').remove();
+                $tbody.find('tr').show();
+            }
+        });
+
+        $('.filterable .filters input').keyup(function(e){
+            /* Ignore tab key */
+            var code = e.keyCode || e.which;
+            if (code == '9') return;
+            /* Useful DOM data and selectors */
+            var $input = $(this),
+                inputContent = $input.val().toLowerCase(),
+                $panel = $input.parents('.filterable'),
+                column = $panel.find('.filters th').index($input.parents('th')),
+                $table = $panel.find('.table'),
+                $rows = $table.find('tbody tr');
+            /* Dirtiest filter function ever ;) */
+            var $filteredRows = $rows.filter(function(){
+                var value = $(this).find('td').eq(column).text().toLowerCase();
+                return value.indexOf(inputContent) === -1;
+            });
+            /* Clean previous no-result if exist */
+            $table.find('tbody .no-result').remove();
+            /* Show all rows, hide filtered ones (never do that outside of a demo ! xD) */
+            $rows.show();
+            $filteredRows.hide();
+            /* Prepend no-result row if all rows are filtered */
+            if ($filteredRows.length === $rows.length) {
+                $table.find('tbody').prepend($('<tr class="no-result text-center"><td colspan="'+ $table.find('.filters th').length +'">No result found</td></tr>'));
+            }
+        });
+    });
+</script>
+
+<style>
+    .img-thumbnail{
+        width: 150px !important;
+        height: 100px !important;
+    }
+    .filterable {
+        margin-top: 15px;
+    }
+    .filterable .panel-heading .pull-right {
+        margin-top: -20px;
+    }
+    .filterable .filters input[disabled] {
+        background-color: transparent;
+        border: none;
+        cursor: auto;
+        box-shadow: none;
+        padding: 0;
+        height: auto;
+    }
+    .filterable .filters input[disabled]::-webkit-input-placeholder {
+        color: #333;
+    }
+    .filterable .filters input[disabled]::-moz-placeholder {
+        color: #333;
+    }
+    .filterable .filters input[disabled]:-ms-input-placeholder {
+        color: #333;
+    }
+</style>
+
