@@ -92,7 +92,8 @@ public class EmailServiceImpl implements EmailService {
         helper.setFrom(mail.getFrom());
         helper.setText("<html><body>"
         + "<p>aktivirajte sitrepo nalog</p></br>" +
-        "<a href=\"http://159.89.25.58:8080/sitrepo-0.0.1-SNAPSHOT/emailActivisation/" + mail.getTo() + "\">Aktivirajte nalog ovde</a></br>" +
+        //"<a href=\"http://127.0.01:9090/emailActivisation/" + mail.getTo() + "\">Aktivirajte nalog ovde</a></br>" +
+       "<a href=\"http://159.89.25.58:9090/sitrepo-0.0.1-SNAPSHOT/emailActivisation/" + mail.getTo() + "\">Aktivirajte nalog ovde</a></br>" +
         "</body></html>", true);
         emailSender.send(message);
     }
